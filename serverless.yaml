@@ -1,0 +1,28 @@
+service: nestjs-serverless
+
+useDotenv: true
+
+plugins:
+ - 'serverless-plugin-typescript'
+ - serverless-plugin-optimize
+ - serverless-offline
+
+provider:
+  name: aws
+  stage: dev
+  region: us-east-1
+  runtime: nodejs12.x
+  environment:
+    PORT: ${env:PORT}
+  
+functions:
+  main:
+    handler: src/serverless.handler
+    events:
+      - http:
+          method: ANY
+          path: /{any+}
+      
+custom:
+  serverless-offline:
+    httpPort: ${self:provider.environment.PORT}
